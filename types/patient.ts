@@ -1,9 +1,4 @@
-export interface Doctor {
-  _id: string;
-  name: string;
-  specialization: string;
-  hospital: string;
-}
+import type { Doctor } from './doctor';
 
 export type Gender = 'Male' | 'Female' | 'Other';
 
@@ -31,11 +26,6 @@ export interface PatientListResponse {
   pagination: PatientPagination;
 }
 
-export interface DoctorListResponse {
-  success: boolean;
-  data: Doctor[];
-}
-
 export interface PatientForm {
   name: string;
   age: string;
@@ -59,4 +49,3 @@ export interface PatientQueryParams {
   search?: string;
   condition?: string;
 }
-

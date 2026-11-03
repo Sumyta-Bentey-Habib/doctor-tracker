@@ -96,3 +96,77 @@ export const PATIENT_STRINGS = {
 } as const;
 
 export type PatientStrings = typeof PATIENT_STRINGS;
+
+export const DOCTOR_STRINGS = {
+  // Navigation & Brand
+  brandName: 'MediTrack',
+  adminPortal: 'ADMIN PORTAL',
+  mainMenu: 'MAIN MENU',
+  preferences: 'PREFERENCES',
+  overview: 'Overview',
+  doctors: 'Doctors',
+  patients: 'Patients',
+  settings: 'Settings',
+  needAssistance: 'Need assistance?',
+  assistanceText: 'Contact your system administrator for support.',
+  administrator: 'Administrator',
+  logout: 'Log out',
+
+  // Headers
+  headerBadge: 'Dashboard / Doctors',
+  headingBadge: 'DOCTOR DIRECTORY',
+  heading: 'Manage doctors',
+  subheading: 'Add, update, search, and manage doctor records.',
+  addDoctor: 'Add doctor',
+
+  // Summary / Stats
+  totalRegisteredDoctors: 'Total registered doctors',
+
+  // Filters
+  filterHeading: 'Search and filters',
+  searchPlaceholder: 'Search doctors...',
+  specializationPlaceholder: 'Filter by specialization',
+  hospitalPlaceholder: 'Filter by hospital',
+  clearAllFilters: 'Clear all filters',
+
+  // Table
+  recordsHeading: 'Doctor records',
+  recordsSubheading: 'Doctor information retrieved from your database.',
+  tableColumns: ['DOCTOR', 'SPECIALIZATION', 'HOSPITAL', 'CONTACT', 'JOINED', 'ACTIONS'] as const,
+  loadingDoctors: 'Loading doctors...',
+  noDoctorsTitle: 'No doctors found',
+  noDoctorsSubtitle: 'Try changing your filters or add a new doctor.',
+  editDoctor: 'Edit doctor',
+  deleteDoctor: 'Delete doctor',
+  showing: 'Showing',
+  of: 'of',
+  doctorsWord: 'doctors',
+  doctorWord: 'doctor',
+  pageWord: 'Page',
+
+  // Footer
+  copyright: (year: number) => `© ${year} MediTrack. All rights reserved.`,
+  footerTagline: 'Healthcare management made simpler.',
+
+  // Modal
+  modalAddTitle: 'Add new doctor',
+  modalEditTitle: 'Edit doctor',
+  modalAddSubtitle: 'Enter the doctor information to create a record.',
+  modalEditSubtitle: 'Update the doctor information below.',
+  btnCancel: 'Cancel',
+  btnSaving: 'Saving...',
+  btnSaveChanges: 'Save changes',
+  btnAddDoctor: 'Add doctor',
+
+  // Alerts & Messages
+  doctorCreatedSuccess: 'Doctor added successfully.',
+  doctorUpdatedSuccess: 'Doctor updated successfully.',
+  doctorDeletedSuccess: (name: string) => `${name} was deleted successfully.`,
+  unableToLoadDoctors: 'Unable to load doctors.',
+  unableToSaveDoctor: 'Unable to save doctor.',
+  unableToDeleteDoctor: 'Unable to delete doctor.',
+  unableToLogout: 'Unable to log out.',
+  deleteConfirmation: (name: string) => `Are you sure you want to delete ${name}?`,
+} as const;
+
+export type DoctorStrings = typeof DOCTOR_STRINGS;
