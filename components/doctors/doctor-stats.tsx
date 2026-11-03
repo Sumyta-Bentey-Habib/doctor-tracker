@@ -7,17 +7,17 @@ interface DoctorStatsProps {
 
 export function DoctorStats({ totalDoctors }: DoctorStatsProps) {
   return (
-    <section className="rounded-2xl border border-border bg-surface p-5 shadow-card">
+    <section className="overflow-hidden rounded-3xl border border-border/70 bg-surface/85 p-6 shadow-card backdrop-blur-xl transition hover:border-primary/20">
       <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-muted text-primary">
-          <Stethoscope size={22} />
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary dark:bg-primary/20 shadow-xs">
+          <Stethoscope size={24} strokeWidth={2.2} />
         </div>
 
         <div>
-          <p className="text-xs font-medium text-text-secondary">
+          <p className="text-xs font-semibold text-text-secondary">
             {DOCTOR_STRINGS.totalRegisteredDoctors}
           </p>
-          <p className="mt-1 text-2xl font-bold text-foreground">
+          <p className="mt-1 text-3xl font-black tracking-tight text-foreground">
             {totalDoctors.toLocaleString()}
           </p>
         </div>
@@ -25,4 +25,3 @@ export function DoctorStats({ totalDoctors }: DoctorStatsProps) {
     </section>
   );
 }
-

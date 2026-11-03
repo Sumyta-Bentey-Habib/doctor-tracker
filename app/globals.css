@@ -1,47 +1,99 @@
-
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   /* Brand */
-  --primary: #4f6df5;
-  --primary-hover: #405de0;
+  --primary: #7c5cfc;
+  --primary-hover: #6a4aee;
   --primary-foreground: #ffffff;
-  --primary-muted: #e9edff;
+  --primary-muted: #ede9fe;
 
-  /* Backgrounds */
-  --background: #f7f8fc;
+  /* Backgrounds & Glass */
+  --background: #f6f7fb;
   --surface: #ffffff;
   --surface-secondary: #f8fafc;
   --surface-hover: #f1f5f9;
+  --surface-glass: rgba(255, 255, 255, 0.82);
   --sidebar: #17243b;
 
   /* Text */
-  --foreground: #17243b;
+  --foreground: #111827;
   --text-secondary: #64748b;
-  --text-muted: #98a1b2;
+  --text-muted: #94a3b8;
   --text-inverse: #ffffff;
 
   /* Borders */
   --border: #e2e8f0;
   --border-subtle: #edf0f5;
+  --border-glass: rgba(255, 255, 255, 0.75);
 
   /* Semantic */
-  --success: #059669;
+  --success: #10b981;
   --success-bg: #ecfdf5;
-  --warning: #d97706;
+  --warning: #f59e0b;
   --warning-bg: #fffbeb;
-  --danger: #e11d48;
+  --danger: #f43f5e;
   --danger-bg: #fff1f2;
-  --info: #2563eb;
+  --info: #3b82f6;
   --info-bg: #eff6ff;
 
   /* Chart */
-  --chart-primary: #4f6df5;
+  --chart-primary: #7c5cfc;
+  --chart-secondary: #c4b5fd;
   --chart-grid: #edf0f5;
   --chart-tooltip-bg: #ffffff;
 
   /* Shadows */
-  --shadow-card: 0 2px 10px rgb(15 23 42 / 2%);
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --shadow-soft: 0 10px 30px -5px rgba(124, 92, 252, 0.08);
+}
+
+.dark {
+  /* Brand */
+  --primary: #8b5cf6;
+  --primary-hover: #9f7aea;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(139, 92, 246, 0.22);
+
+  /* Backgrounds & Glass */
+  --background: #0b0e17;
+  --surface: #131825;
+  --surface-secondary: #1a2032;
+  --surface-hover: #21293e;
+  --surface-glass: rgba(19, 24, 37, 0.85);
+  --sidebar: #090c14;
+
+  /* Text */
+  --foreground: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  /* Borders */
+  --border: #1e2638;
+  --border-subtle: #171f2e;
+  --border-glass: rgba(255, 255, 255, 0.08);
+
+  /* Semantic */
+  --success: #34d399;
+  --success-bg: rgba(16, 185, 129, 0.15);
+  --warning: #fbbf24;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --danger: #fb7185;
+  --danger-bg: rgba(244, 63, 94, 0.15);
+  --info: #60a5fa;
+  --info-bg: rgba(59, 130, 246, 0.15);
+
+  /* Chart */
+  --chart-primary: #8b5cf6;
+  --chart-secondary: #a78bfa;
+  --chart-grid: #1e2638;
+  --chart-tooltip-bg: #151b2a;
+
+  /* Shadows */
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+  --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
 }
 
 @theme inline {
@@ -56,6 +108,7 @@
   --color-surface: var(--surface);
   --color-surface-secondary: var(--surface-secondary);
   --color-surface-hover: var(--surface-hover);
+  --color-surface-glass: var(--surface-glass);
 
   --color-sidebar: var(--sidebar);
 
@@ -65,6 +118,7 @@
 
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
+  --color-border-glass: var(--border-glass);
 
   --color-success: var(--success);
   --color-success-bg: var(--success-bg);
@@ -76,9 +130,11 @@
   --color-info-bg: var(--info-bg);
 
   --color-chart-primary: var(--chart-primary);
+  --color-chart-secondary: var(--chart-secondary);
   --color-chart-grid: var(--chart-grid);
 
   --shadow-card: var(--shadow-card);
+  --shadow-soft: var(--shadow-soft);
 }
 
 * {
@@ -92,9 +148,10 @@ body {
 
 body {
   margin: 0;
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 button,

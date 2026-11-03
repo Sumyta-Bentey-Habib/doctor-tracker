@@ -1,23 +1,22 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Plus } from 'lucide-react';
 import AuthGuard, { useAuth } from '@/components/auth/auth-guard';
 import {
   PatientFilters,
-  PatientHeader,
   PatientModal,
-  PatientSidebar,
   PatientStats,
   PatientTable,
 } from '@/components/patients';
+import { AppShell } from '@/components/layout/app-shell';
 import { useDoctors, usePatientForm, usePatients } from '@/hooks';
 import { patientService } from '@/services';
+import { PATIENT_STRINGS } from '@/utils';
 
 function PatientsContent() {
   const router = useRouter();
   const { user } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const {
     patients,
@@ -68,45 +67,61 @@ function PatientsContent() {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <PatientSidebar
-        userName={user.name}
-        mobileMenuOpen={mobileMenuOpen}
-        onCloseMobileMenu={() => setMobileMenuOpen(false)}
-        onLogout={handleLogout}
-      />
+    <AppShell
+      adminName={user.name}
+      adminEmail={user.email}
+      totalPatients={totalPatients}
+      totalDoctors={doctors.length}
+      onLogout={handleLogout}
+    >
+      <div className="space-y-6">
+        {/* Page Title & Action */}
+        <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="mb-1 text-xs font-bold uppercase tracking-wider text-primary">
+              {PATIENT_STRINGS.adminBadge}
+            </p>
+            <h2 className="text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+              {PATIENT_STRINGS.heading}
+            </h2>
+            <p className="mt-1 text-xs font-medium text-text-secondary sm:text-sm">
+              {PATIENT_STRINGS.subheading}
+            </p>
+          </div>
 
-      <main className="min-w-0 flex-1">
-        <PatientHeader
-          onOpenMobileMenu={() => setMobileMenuOpen(true)}
-          onAddPatient={openCreateModal}
-          canAddPatient={doctors.length > 0}
+          <button
+            type="button"
+            onClick={openCreateModal}
+            disabled={doctors.length === 0}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-tr from-primary to-primary-hover px-5 py-2.5 text-xs font-bold text-primary-foreground shadow-sm shadow-primary/25 transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Plus size={16} strokeWidth={2.5} />
+            <span>{PATIENT_STRINGS.addPatient}</span>
+          </button>
+        </section>
+
+        <PatientStats totalPatients={totalPatients} />
+
+        <PatientFilters
+          search={search}
+          condition={condition}
+          onSearchChange={handleSearchChange}
+          onConditionChange={handleConditionChange}
         />
 
-        <div className="mx-auto max-w-7xl space-y-6 p-5 sm:p-8">
-          <PatientStats totalPatients={totalPatients} />
-
-          <PatientFilters
-            search={search}
-            condition={condition}
-            onSearchChange={handleSearchChange}
-            onConditionChange={handleConditionChange}
-          />
-
-          <PatientTable
-            patients={patients}
-            loading={loading}
-            error={error}
-            deletingId={deletingId}
-            page={page}
-            totalPages={totalPages}
-            totalPatients={totalPatients}
-            onPageChange={setPage}
-            onEdit={openEditModal}
-            onDelete={(patient) => void deletePatient(patient)}
-          />
-        </div>
-      </main>
+        <PatientTable
+          patients={patients}
+          loading={loading}
+          error={error}
+          deletingId={deletingId}
+          page={page}
+          totalPages={totalPages}
+          totalPatients={totalPatients}
+          onPageChange={setPage}
+          onEdit={openEditModal}
+          onDelete={(patient) => void deletePatient(patient)}
+        />
+      </div>
 
       <PatientModal
         isOpen={modalOpen}
@@ -119,7 +134,7 @@ function PatientsContent() {
         onUpdateForm={updateForm}
         onSubmit={(event) => void handleSubmit(event)}
       />
-    </div>
+    </AppShell>
   );
 }
 

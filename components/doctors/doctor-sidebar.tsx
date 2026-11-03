@@ -20,7 +20,7 @@ interface DoctorSidebarProps {
 }
 
 const NAVIGATION_ITEMS = [
-  { label: 'Overview', icon: LayoutDashboard, href: '/' },
+  { label: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
   { label: 'Doctors', icon: Stethoscope, href: '/doctors' },
   { label: 'Patients', icon: Users, href: '/patients' },
 ] as const;

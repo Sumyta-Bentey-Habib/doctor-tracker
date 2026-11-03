@@ -1,4 +1,5 @@
 import { Menu, Plus } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { formatCurrentDate, PATIENT_STRINGS } from '@/utils';
 
 interface PatientHeaderProps {
@@ -34,7 +35,10 @@ export function PatientHeader({
           </div>
         </div>
 
-        <p className="hidden text-sm text-text-secondary sm:block">{currentDate}</p>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <p className="hidden text-sm text-text-secondary sm:block">{currentDate}</p>
+        </div>
       </header>
 
       <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

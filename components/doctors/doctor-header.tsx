@@ -1,4 +1,5 @@
 import { Menu, Plus } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { DOCTOR_STRINGS, formatLongDate, getDoctorInitials } from '@/utils';
 
 interface DoctorHeaderProps {
@@ -37,7 +38,9 @@ export function DoctorHeader({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-5">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <ThemeToggle />
+
           <div className="hidden items-center gap-2 rounded-xl border border-border bg-surface-secondary px-3 py-2 text-xs text-text-secondary sm:flex">
             {currentDate}
           </div>

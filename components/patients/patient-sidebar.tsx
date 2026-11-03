@@ -39,8 +39,8 @@ export function PatientSidebar({
             <Activity size={21} />
           </div>
           <div>
-            <p className="text-lg font-bold">Care Guide</p>
-            <p className="text-xs text-text-inverse/60">Admin Dashboard</p>
+            <p className="text-lg font-bold">{PATIENT_STRINGS.brandName}</p>
+            <p className="text-xs text-text-inverse/60">{PATIENT_STRINGS.adminPortal}</p>
           </div>
           <button
             type="button"
@@ -60,7 +60,7 @@ export function PatientSidebar({
           <nav className="space-y-1">
             <button
               type="button"
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/dashboard')}
               className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-text-inverse/70 transition hover:bg-text-inverse/10 hover:text-text-inverse"
             >
               <LayoutDashboard size={19} />

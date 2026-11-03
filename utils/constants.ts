@@ -14,6 +14,8 @@ export type AppStrings = typeof APP_STRINGS;
 
 export const PATIENT_STRINGS = {
   // Navigation & Headers
+  brandName: 'MediTrack',
+  adminPortal: 'ADMIN PORTAL',
   navMenu: 'Main menu',
   navOverview: 'Overview',
   navDoctors: 'Doctors',
@@ -170,3 +172,131 @@ export const DOCTOR_STRINGS = {
 } as const;
 
 export type DoctorStrings = typeof DOCTOR_STRINGS;
+
+export const DASHBOARD_STRINGS = {
+  // Brand & Nav
+  brandName: 'MediTrack',
+  adminPortal: 'ADMIN PORTAL',
+  navOverview: 'Overview',
+  navDoctors: 'Doctors',
+  navPatients: 'Patients',
+  navSettings: 'Settings',
+  navAnalytics: 'Analytics',
+  mainMenu: 'MAIN MENU',
+  preferences: 'PREFERENCES',
+
+  // Welcome Header
+  greetingPrefix: 'Good day',
+  greetingFallback: 'Admin',
+  overviewHeading: 'Overview',
+  breadcrumb: 'Dashboard / Overview',
+  subheading: "Here's an overview of your healthcare system.",
+
+  // Stat Cards
+  statTotalDoctors: 'Total Doctors',
+  statTotalDoctorsSubtitle: 'Active medical staff',
+  statTotalPatients: 'Total Patients',
+  statTotalPatientsSubtitle: 'Registered patient base',
+
+  // Charts
+  chartRegistrationsTitle: 'Patient registrations',
+  chartRegistrationsSubtitle: 'Registration trends from your database',
+  chartDoctorTitle: 'Patients per doctor',
+  chartDoctorSubtitle: 'Patient distribution by doctor',
+  chartCurrentMonth: 'Current Month',
+  chartNoTrends: 'No registration trend data available.',
+  chartNoDoctors: 'No doctor distribution data available.',
+
+  // Recent Patients
+  recentPatientsTitle: 'Recent patients',
+  recentPatientsSubtitle: 'Patient records retrieved from your database',
+  searchPlaceholder: 'Search patients...',
+  colPatient: 'PATIENT',
+  colPatientId: 'PATIENT ID',
+  colDoctor: 'ASSIGNED DOCTOR',
+  colCondition: 'CONDITION',
+  colRegistered: 'REGISTERED',
+  noPatientsFound: 'No patient records found.',
+  loadingPatients: 'Loading patients...',
+  unassigned: 'Unassigned',
+  showing: 'Showing',
+  of: 'of',
+  patientsWord: 'patients',
+  pageWord: 'Page',
+
+  // Sidebar assistance & user
+  needAssistance: 'Need assistance?',
+  assistanceText: 'Contact your system administrator for support.',
+  administrator: 'Administrator',
+  logout: 'Log out',
+  loadingDashboard: 'Loading dashboard...',
+  unableToLoad: 'Unable to load dashboard data.',
+  unableToLogout: 'Unable to log out.',
+
+  // Footer
+  copyright: (year: number) => `© ${year} MediTrack. All rights reserved.`,
+  footerTagline: 'Healthcare management made simpler.',
+} as const;
+
+export type DashboardStrings = typeof DASHBOARD_STRINGS;
+
+export const THEME_STRINGS = {
+  themePreference: 'Theme preference',
+  lightMode: 'Light',
+  darkMode: 'Dark',
+  systemMode: 'System',
+  switchToLight: 'Switch to light mode',
+  switchToDark: 'Switch to dark mode',
+} as const;
+
+export type ThemeStrings = typeof THEME_STRINGS;
+
+export const WELCOME_STRINGS = {
+  brandName: 'MediTrack',
+  adminPortal: 'ADMIN PORTAL',
+  badge: 'HEALTHCARE MANAGEMENT PLATFORM',
+  heroTitle: 'Manage healthcare operations with modern clarity & intelligence.',
+  heroSubtitle:
+    'A unified workspace to oversee medical practitioners, track patient registrations, and analyze hospital flow in real-time.',
+  btnGetStarted: 'Access Admin Portal',
+  btnLogin: 'Sign In',
+  btnDashboard: 'Open Dashboard',
+  featuresHeading: 'Engineered for modern healthcare teams',
+  featuresSubheading:
+    'Streamlined tools designed to minimize operational friction and maximize patient care quality.',
+  feature1Title: 'Doctor Directory',
+  feature1Desc:
+    'Track practitioner credentials, specialties, hospitals, and direct contacts in one place.',
+  feature2Title: 'Patient Admissions',
+  feature2Desc:
+    'Register incoming patients, assign designated doctors, and record conditions seamlessly.',
+  feature3Title: 'Operational Insights',
+  feature3Desc:
+    'Real-time registration metrics and doctor load distribution at your fingertips.',
+  securityBadge: 'Protected by role-based administrator security & session encryption',
+  footerCopyright: (year: number) => `© ${year} MediTrack. All rights reserved.`,
+} as const;
+
+export type WelcomeStrings = typeof WELCOME_STRINGS;
+
+export const LOGIN_STRINGS = {
+  brandName: 'MediTrack',
+  adminPortal: 'ADMIN PORTAL',
+  backToWelcome: 'Back to welcome',
+  heading: 'Welcome back',
+  subheading: 'Enter your administrator credentials to access your dashboard.',
+  labelEmail: 'Email address',
+  placeholderEmail: 'admin@example.com',
+  labelPassword: 'Password',
+  placeholderPassword: 'Enter your password',
+  btnSignIn: 'Sign in to dashboard',
+  btnSigningIn: 'Signing in...',
+  restrictedNotice: 'Restricted access · Authorized administrators only',
+  sideTitle: 'Manage healthcare operations with clarity.',
+  sideSubtitle:
+    'A centralized workspace to manage doctors, patients, and healthcare records.',
+} as const;
+
+export type LoginStrings = typeof LOGIN_STRINGS;
+
+

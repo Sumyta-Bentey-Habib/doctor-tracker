@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { X } from 'lucide-react';
+import { Stethoscope, X } from 'lucide-react';
 import type { Doctor, DoctorForm } from '@/types';
 import { DOCTOR_FORM_FIELDS, DOCTOR_STRINGS } from '@/utils';
 
@@ -28,38 +28,49 @@ export function DoctorModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-foreground/50 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-[100] flex min-h-screen items-center justify-center overflow-y-auto bg-black/60 p-4 sm:p-6 backdrop-blur-md transition-all"
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
+        if (event.target === event.currentTarget && !formLoading) onClose();
       }}
     >
-      <div className="my-auto w-full max-w-[560px] rounded-2xl border border-border bg-surface p-5 shadow-2xl sm:p-7">
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-bold text-foreground">
-              {isEditing ? DOCTOR_STRINGS.modalEditTitle : DOCTOR_STRINGS.modalAddTitle}
-            </h3>
-            <p className="mt-1 text-xs text-text-muted">
-              {isEditing ? DOCTOR_STRINGS.modalEditSubtitle : DOCTOR_STRINGS.modalAddSubtitle}
-            </p>
+      <div className="relative my-auto w-full max-w-[560px] overflow-hidden rounded-3xl border border-border/80 bg-surface/95 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+        {/* Header */}
+        <div className="mb-6 flex items-start justify-between gap-4 border-b border-border/50 pb-5">
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary dark:bg-primary/20 shadow-xs">
+              <Stethoscope size={22} strokeWidth={2.2} />
+            </div>
+
+            <div>
+              <h3 className="text-lg font-black tracking-tight text-foreground sm:text-xl">
+                {isEditing ? DOCTOR_STRINGS.modalEditTitle : DOCTOR_STRINGS.modalAddTitle}
+              </h3>
+              <p className="mt-0.5 text-xs font-medium text-text-muted">
+                {isEditing ? DOCTOR_STRINGS.modalEditSubtitle : DOCTOR_STRINGS.modalAddSubtitle}
+              </p>
+            </div>
           </div>
 
           <button
+            type="button"
             onClick={onClose}
             disabled={formLoading}
             aria-label="Close modal"
-            className="rounded-lg p-2 text-text-muted transition hover:bg-surface-hover hover:text-foreground disabled:opacity-50"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-surface text-text-muted shadow-xs transition hover:bg-surface-hover hover:text-foreground disabled:opacity-50"
           >
-            <X size={19} />
+            <X size={16} />
           </button>
         </div>
 
+        {/* Form */}
         <form onSubmit={onSubmit} className="space-y-4">
           {DOCTOR_FORM_FIELDS.map((field) => (
             <div key={field.name}>
               <label
                 htmlFor={field.name}
-                className="mb-1.5 block text-xs font-semibold text-text-secondary"
+                className="mb-1.5 block text-xs font-bold text-text-secondary"
               >
                 {field.label}
               </label>
@@ -72,17 +83,18 @@ export function DoctorModal({
                 value={form[field.name]}
                 onChange={(event) => onUpdateForm(field.name, event.target.value)}
                 placeholder={field.placeholder}
-                className="h-11 w-full rounded-xl border border-border bg-surface px-3 text-xs text-foreground outline-none transition placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-2xl border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden shadow-xs transition placeholder:text-text-muted focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
               />
             </div>
           ))}
 
-          <div className="flex flex-col-reverse gap-2 pt-3 sm:flex-row sm:justify-end">
+          {/* Actions */}
+          <div className="flex flex-col-reverse gap-2.5 pt-4 border-t border-border/50 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
               disabled={formLoading}
-              className="rounded-xl border border-border px-5 py-3 text-xs font-semibold text-text-secondary transition hover:bg-surface-hover disabled:opacity-50"
+              className="rounded-full border border-border/70 bg-surface px-5 py-2.5 text-xs font-semibold text-text-secondary shadow-xs transition hover:bg-surface-hover hover:text-foreground disabled:opacity-50"
             >
               {DOCTOR_STRINGS.btnCancel}
             </button>
@@ -90,7 +102,7 @@ export function DoctorModal({
             <button
               type="submit"
               disabled={formLoading}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-semibold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-tr from-primary to-primary-hover px-6 py-2.5 text-xs font-bold text-primary-foreground shadow-sm shadow-primary/25 transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {formLoading
                 ? DOCTOR_STRINGS.btnSaving
@@ -104,4 +116,3 @@ export function DoctorModal({
     </div>
   );
 }
-
