@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Activity,
@@ -79,9 +79,9 @@ interface PatientListResponse {
 }
 
 const navigation = [
-  { label: 'Overview', icon: LayoutDashboard, enabled: true },
-  { label: 'Doctors', icon: Stethoscope, enabled: false },
-  { label: 'Patients', icon: Users, enabled: false },
+  { label: 'Overview', icon: LayoutDashboard, href: '/' },
+  { label: 'Doctors', icon: Stethoscope, href: '/doctors' },
+  { label: 'Patients', icon: Users, href: '/patients' },
 ];
 
 function getObject(value: unknown): Record<string, unknown> {
@@ -169,47 +169,50 @@ function DashboardContent() {
   }, []);
 
   // Fetch patients using backend search and pagination.
-  const loadPatients = useCallback(async () => {
-    setPatientsLoading(true);
+  useEffect(() => {
+    let ignore = false;
 
-    try {
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '5',
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '5',
+    });
+
+    if (searchQuery.trim()) {
+      params.set('search', searchQuery.trim());
+    }
+
+    apiRequest<PatientListResponse>(`/patients?${params.toString()}`)
+      .then((response) => {
+        if (ignore) return;
+
+        const root = getObject(response);
+        const data = getObject(root.data);
+        const pagination = getObject(root.pagination ?? data.pagination);
+
+        const patientData = Array.isArray(root.data)
+          ? root.data
+          : Array.isArray(data.patients)
+            ? data.patients
+            : Array.isArray(root.patients)
+              ? root.patients
+              : [];
+
+        setPatients(patientData as Patient[]);
+        setTotalPatients(Number(pagination.total ?? patientData.length));
+        setTotalPages(Math.max(1, Number(pagination.totalPages ?? 1)));
+        setPatientsLoading(false);
+      })
+      .catch((err) => {
+        if (ignore) return;
+        setPatients([]);
+        setError(err instanceof Error ? err.message : 'Unable to load patients.');
+        setPatientsLoading(false);
       });
 
-      if (searchQuery.trim()) {
-        params.set('search', searchQuery.trim());
-      }
-
-      const response = await apiRequest<PatientListResponse>(`/patients?${params.toString()}`);
-
-      const root = getObject(response);
-      const data = getObject(root.data);
-      const pagination = getObject(root.pagination ?? data.pagination);
-
-      const patientData = Array.isArray(root.data)
-        ? root.data
-        : Array.isArray(data.patients)
-          ? data.patients
-          : Array.isArray(root.patients)
-            ? root.patients
-            : [];
-
-      setPatients(patientData as Patient[]);
-      setTotalPatients(Number(pagination.total ?? patientData.length));
-      setTotalPages(Math.max(1, Number(pagination.totalPages ?? 1)));
-    } catch (err) {
-      setPatients([]);
-      setError(err instanceof Error ? err.message : 'Unable to load patients.');
-    } finally {
-      setPatientsLoading(false);
-    }
+    return () => {
+      ignore = true;
+    };
   }, [page, searchQuery]);
-
-  useEffect(() => {
-    loadPatients();
-  }, [loadPatients]);
 
   const handleLogout = async () => {
     setLogoutLoading(true);
@@ -326,16 +329,16 @@ function DashboardContent() {
               return (
                 <button
                   key={item.label}
-                  disabled={!item.enabled}
                   onClick={() => {
-                    if (item.enabled) {
-                      setMobileMenuOpen(false);
+                    setMobileMenuOpen(false);
+                    if (!isActive) {
+                      router.push(item.href);
                     }
                   }}
                   className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-[13px] font-medium transition ${
                     isActive
                       ? 'bg-primary text-primary-foreground shadow-lg'
-                      : 'text-text-muted hover:bg-white/5 hover:text-text-inverse disabled:cursor-not-allowed disabled:opacity-50'
+                      : 'text-text-muted hover:bg-white/5 hover:text-text-inverse'
                   }`}
                 >
                   <Icon size={19} />

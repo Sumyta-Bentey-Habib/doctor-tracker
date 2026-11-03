@@ -20,9 +20,9 @@ interface DoctorSidebarProps {
 }
 
 const NAVIGATION_ITEMS = [
-  { label: 'Overview', icon: LayoutDashboard },
-  { label: 'Doctors', icon: Stethoscope },
-  { label: 'Patients', icon: Users },
+  { label: 'Overview', icon: LayoutDashboard, href: '/' },
+  { label: 'Doctors', icon: Stethoscope, href: '/doctors' },
+  { label: 'Patients', icon: Users, href: '/patients' },
 ] as const;
 
 export function DoctorSidebar({
@@ -85,22 +85,20 @@ export function DoctorSidebar({
             {NAVIGATION_ITEMS.map((item) => {
               const Icon = item.icon;
               const isActive = item.label === 'Doctors';
-              const isDisabled = item.label === 'Patients';
 
               return (
                 <button
                   key={item.label}
-                  disabled={isDisabled}
                   onClick={() => {
                     onCloseMobileMenu();
-                    if (item.label === 'Overview') {
-                      router.push('/');
+                    if (!isActive) {
+                      router.push(item.href);
                     }
                   }}
                   className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-[13px] font-medium transition ${
                     isActive
                       ? 'bg-primary text-primary-foreground shadow-lg'
-                      : 'text-text-muted hover:bg-text-inverse/5 hover:text-text-inverse disabled:cursor-not-allowed disabled:opacity-50'
+                      : 'text-text-muted hover:bg-text-inverse/5 hover:text-text-inverse'
                   }`}
                 >
                   <Icon size={19} />
