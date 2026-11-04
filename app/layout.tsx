@@ -10,6 +10,12 @@ const geist = Geist({
 export const metadata: Metadata = {
   title: 'Doctor Tracker | Admin Dashboard',
   description: 'Manage doctors, patients, and healthcare operations.',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+  },
 };
 
 const themeScript = `
@@ -34,6 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={`${geist.variable} antialiased`}>{children}</body>

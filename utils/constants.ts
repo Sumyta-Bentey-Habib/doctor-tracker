@@ -313,4 +313,44 @@ export const LOGIN_STRINGS = {
 
 export type LoginStrings = typeof LOGIN_STRINGS;
 
+export const CALENDAR_STRINGS = {
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
+  clearDate: 'Clear',
+  today: 'Today',
+  selectDate: 'Select date',
+  months: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ] as const,
+  shortMonths: [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ] as const,
+  weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const,
+} as const;
+
+export type CalendarStrings = typeof CALENDAR_STRINGS;
+
+
 

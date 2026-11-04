@@ -1,4 +1,5 @@
-import { Calendar, Filter, Search } from 'lucide-react';
+import { Filter, Search } from 'lucide-react';
+import { CalendarPicker } from '@/components/ui';
 import { PATIENT_STRINGS } from '@/utils';
 
 interface PatientFiltersProps {
@@ -27,7 +28,7 @@ export function PatientFilters({
   const hasActiveFilters = Boolean(search || condition || startDate || endDate);
 
   return (
-    <section className="rounded-3xl border border-border/70 bg-surface/85 p-6 shadow-card backdrop-blur-xl transition hover:border-primary/20">
+    <section className="relative z-30 rounded-3xl border border-border/70 bg-surface/85 p-6 shadow-card backdrop-blur-xl transition hover:border-primary/20">
       <div className="mb-4 flex items-center gap-2">
         <Filter size={16} className="text-primary" />
         <h3 className="text-sm font-bold text-foreground">{PATIENT_STRINGS.filterHeading}</h3>
@@ -53,29 +54,23 @@ export function PatientFilters({
           className="h-11 rounded-full border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden placeholder:text-text-muted shadow-xs transition focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
         />
 
-        <div className="flex h-11 items-center gap-2 rounded-full border border-border/70 bg-surface/90 px-3.5 shadow-xs transition focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
-          <Calendar size={14} className="shrink-0 text-text-muted" />
-          <input
-            type="date"
-            value={startDate}
-            onChange={(event) => onStartDateChange?.(event.target.value)}
-            placeholder={PATIENT_STRINGS.startDatePlaceholder}
-            className="min-w-0 flex-1 bg-transparent text-xs text-foreground outline-hidden placeholder:text-text-muted"
-            title={PATIENT_STRINGS.startDatePlaceholder}
-          />
-        </div>
+        <CalendarPicker
+          value={startDate}
+          onChange={(val) => onStartDateChange?.(val)}
+          placeholder={PATIENT_STRINGS.startDatePlaceholder}
+          title={PATIENT_STRINGS.startDatePlaceholder}
+          maxDate={endDate || undefined}
+          align="start"
+        />
 
-        <div className="flex h-11 items-center gap-2 rounded-full border border-border/70 bg-surface/90 px-3.5 shadow-xs transition focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
-          <Calendar size={14} className="shrink-0 text-text-muted" />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(event) => onEndDateChange?.(event.target.value)}
-            placeholder={PATIENT_STRINGS.endDatePlaceholder}
-            className="min-w-0 flex-1 bg-transparent text-xs text-foreground outline-hidden placeholder:text-text-muted"
-            title={PATIENT_STRINGS.endDatePlaceholder}
-          />
-        </div>
+        <CalendarPicker
+          value={endDate}
+          onChange={(val) => onEndDateChange?.(val)}
+          placeholder={PATIENT_STRINGS.endDatePlaceholder}
+          title={PATIENT_STRINGS.endDatePlaceholder}
+          minDate={startDate || undefined}
+          align="end"
+        />
       </div>
 
       {hasActiveFilters && onClearFilters && (

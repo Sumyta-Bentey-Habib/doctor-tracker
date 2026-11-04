@@ -28,7 +28,7 @@ export function PatientTable({
   onDelete,
 }: PatientTableProps) {
   return (
-    <section className="overflow-hidden rounded-3xl border border-border/70 bg-surface/85 shadow-card backdrop-blur-xl transition hover:border-primary/20">
+    <section className="relative z-10 overflow-hidden rounded-3xl border border-border/70 bg-surface/85 shadow-card backdrop-blur-xl transition hover:border-primary/20">
       <div className="flex flex-col justify-between gap-2 p-5 sm:flex-row sm:items-center sm:p-6">
         <div>
           <h2 className="text-base font-bold tracking-tight text-foreground">{PATIENT_STRINGS.recordsHeading}</h2>
