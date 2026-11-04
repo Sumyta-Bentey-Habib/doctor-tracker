@@ -22,6 +22,14 @@ export const patientService = {
       searchParams.set('condition', params.condition.trim());
     }
 
+    if (params.startDate?.trim()) {
+      searchParams.set('startDate', params.startDate.trim());
+    }
+
+    if (params.endDate?.trim()) {
+      searchParams.set('endDate', params.endDate.trim());
+    }
+
     return apiRequest<PatientListResponse>(`/patients?${searchParams.toString()}`);
   },
 

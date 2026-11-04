@@ -7,17 +7,16 @@ interface PatientStatsProps {
 
 export function PatientStats({ totalPatients }: PatientStatsProps) {
   return (
-    <section className="rounded-2xl border border-border bg-surface p-5 shadow-card">
+    <section className="overflow-hidden rounded-3xl border border-border/70 bg-surface/85 p-6 shadow-card backdrop-blur-xl transition hover:border-primary/20">
       <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-muted text-primary">
-          <Users size={23} />
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-500 dark:bg-sky-500/20 shadow-xs">
+          <Users size={24} strokeWidth={2.2} />
         </div>
         <div>
-          <p className="text-sm text-text-secondary">{PATIENT_STRINGS.totalRegistered}</p>
-          <p className="text-2xl font-bold tabular-nums text-foreground">{totalPatients}</p>
+          <p className="text-xs font-semibold text-text-secondary">{PATIENT_STRINGS.totalRegistered}</p>
+          <p className="mt-1 text-3xl font-black tracking-tight text-foreground">{totalPatients.toLocaleString()}</p>
         </div>
       </div>
     </section>
   );
 }
-

@@ -17,6 +17,8 @@ export function useDoctorList({ initialPage = 1, limit = 10 }: UseDoctorListOpti
   const [search, setSearch] = useState('');
   const [specialization, setSpecialization] = useState('');
   const [hospital, setHospital] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const [page, setPage] = useState(initialPage);
   const [totalDoctors, setTotalDoctors] = useState(0);
@@ -33,6 +35,8 @@ export function useDoctorList({ initialPage = 1, limit = 10 }: UseDoctorListOpti
         search,
         specialization,
         hospital,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
       });
 
       setDoctors(response.data);
@@ -44,13 +48,21 @@ export function useDoctorList({ initialPage = 1, limit = 10 }: UseDoctorListOpti
     } finally {
       setLoading(false);
     }
-  }, [page, limit, search, specialization, hospital]);
+  }, [page, limit, search, specialization, hospital, startDate, endDate]);
 
   useEffect(() => {
     let isSubscribed = true;
 
     doctorService
-      .getDoctors({ page, limit, search, specialization, hospital })
+      .getDoctors({
+        page,
+        limit,
+        search,
+        specialization,
+        hospital,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+      })
       .then((response) => {
         if (!isSubscribed) return;
         setDoctors(response.data);
@@ -68,7 +80,7 @@ export function useDoctorList({ initialPage = 1, limit = 10 }: UseDoctorListOpti
     return () => {
       isSubscribed = false;
     };
-  }, [page, limit, search, specialization, hospital]);
+  }, [page, limit, search, specialization, hospital, startDate, endDate]);
 
   const handleSearchChange = (value: string) => {
     setLoading(true);
@@ -88,11 +100,25 @@ export function useDoctorList({ initialPage = 1, limit = 10 }: UseDoctorListOpti
     setPage(1);
   };
 
+  const handleStartDateChange = (value: string) => {
+    setLoading(true);
+    setStartDate(value);
+    setPage(1);
+  };
+
+  const handleEndDateChange = (value: string) => {
+    setLoading(true);
+    setEndDate(value);
+    setPage(1);
+  };
+
   const clearFilters = () => {
     setLoading(true);
     setSearch('');
     setSpecialization('');
     setHospital('');
+    setStartDate('');
+    setEndDate('');
     setPage(1);
   };
 
@@ -129,6 +155,8 @@ export function useDoctorList({ initialPage = 1, limit = 10 }: UseDoctorListOpti
     search,
     specialization,
     hospital,
+    startDate,
+    endDate,
     page,
     totalDoctors,
     totalPages,
@@ -136,6 +164,8 @@ export function useDoctorList({ initialPage = 1, limit = 10 }: UseDoctorListOpti
     handleSearchChange,
     handleSpecializationChange,
     handleHospitalChange,
+    handleStartDateChange,
+    handleEndDateChange,
     clearFilters,
     refetch: fetchDoctors,
     deleteDoctor,

@@ -101,6 +101,54 @@ pnpm run build
 | `/doctors` | Doctor directory and management |
 | `/patients` | Patient directory and management |
 
+## System Architecture
+
+The following diagram illustrates the high-level data flow, user authentication boundary, and communication between Next.js client layers and the backend service:
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                       Next.js App                           │
+│ ┌─────────────────────────┐     ┌─────────────────────────┐ │
+│ │  App Shell & Navigation │     │  AuthGuard (Middleware) │ │
+│ └────────────┬────────────┘     └────────────┬────────────┘ │
+│              │                               │              │
+│              ▼                               ▼              │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ UI Pages: /dashboard, /doctors, /patients, /login       │ │
+│ └────────────────────────────┬────────────────────────────┘ │
+│                              │                              │
+│                              ▼                              │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ Custom React Hooks (useDoctorList, usePatients, etc.)   │ │
+│ └────────────────────────────┬────────────────────────────┘ │
+│                              │                              │
+│                              ▼                              │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ Service Layer (doctorService, patientService, api.ts)   │ │
+│ └────────────────────────────┬────────────────────────────┘ │
+└──────────────────────────────┼──────────────────────────────┘
+                               │ HTTPS / JSON REST
+                               │ Credentials: 'include' (HTTP-only JWT Cookie)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 Express REST API Server                     │
+│               (http://localhost:5000/api)                   │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ Auth Middleware (Cookie JWT Verification)               │ │
+│ └────────────────────────────┬────────────────────────────┘ │
+│                              │                              │
+│                              ▼                              │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ REST Controllers: Auth, Doctors, Patients, Dashboard    │ │
+│ └────────────────────────────┬────────────────────────────┘ │
+│                              │                              │
+│                              ▼                              │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ MongoDB Database (Indexed Collections & Aggregations)   │ │
+│ └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
 ## Backend Integration
 
 The frontend communicates with the Express REST API.
@@ -110,15 +158,16 @@ The frontend communicates with the Express REST API.
 | POST | `/api/auth/login` | Admin login |
 | POST | `/api/auth/logout` | Admin logout |
 | GET | `/api/auth/me` | Verify authenticated session |
-| GET | `/api/dashboard/stats` | Dashboard statistics |
-| GET | `/api/doctors` | Retrieve doctors |
+| GET | `/api/dashboard/stats` | Dashboard statistics & analytics |
+| GET | `/api/doctors` | Retrieve doctors (search, filter, date-wise, paginate) |
 | POST | `/api/doctors` | Create doctor |
 | GET | `/api/doctors/:id` | Retrieve doctor details |
 | PUT | `/api/doctors/:id` | Update doctor |
 | DELETE | `/api/doctors/:id` | Delete doctor |
-| GET | `/api/patients` | Retrieve patients |
 | GET | `/api/doctors/:doctorId/patients` | Retrieve patients assigned to a doctor |
-| POST | `/api/doctors/:doctorId/patients` | Create patient for a doctor |
+| POST | `/api/doctors/:doctorId/patients` | Create patient under a doctor |
+| DELETE | `/api/doctors/:doctorId/patients/:patientId` | Delete patient from doctor's list |
+| GET | `/api/patients` | Retrieve patients (search, condition, date-wise, paginate) |
 | GET | `/api/patients/:id` | Retrieve patient details |
 | PUT | `/api/patients/:id` | Update patient |
 | DELETE | `/api/patients/:id` | Delete patient |
@@ -130,21 +179,24 @@ Authenticated requests include credentials so the browser can send the HTTP-only
 ```text
 doctor-tracker/
 ├── app/
+│   ├── dashboard/
 │   ├── doctors/
-│   │   └── page.tsx
 │   ├── patients/
-│   │   └── page.tsx
 │   ├── login/
-│   │   └── page.tsx
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx
 ├── components/
-│   └── auth/
-│       └── auth-guard.tsx
+│   ├── auth/
+│   ├── dashboard/
+│   ├── doctors/
+│   ├── layout/
+│   └── patients/
+├── hooks/
 ├── lib/
 │   └── api.ts
-├── public/
+├── services/
+├── types/
 ├── utils/
 ├── .env.example
 ├── package.json
@@ -172,3 +224,13 @@ Doctor and patient records are retrieved through paginated API requests instead 
 - Avoids unnecessary client-side processing.
 - Supports larger datasets more efficiently.
 - Keeps search and filtering logic centralized in the backend.
+
+## Visual Evidence
+
+The application is structured to deliver an administrative experience matching the specification requirements:
+
+- **Admin Login (`/login`):** Validates administrator credentials, stores the authentication cookie, and handles redirects.
+- **Analytics Dashboard (`/`):** Summary statistics (total doctors, total patients), real-time Recharts visualizations (Registration Trends and Patient Distribution by Doctor), and recently registered patients table.
+- **Doctor Directory (`/doctors`):** Multi-filter search (keyword, specialization, hospital, and creation date range), responsive records table with server pagination, and dedicated modal to view, add, and delete patients under each doctor.
+- **Patient Records (`/patients`):** Search, condition filtering, creation date range filtering, and comprehensive CRUD dialogs.
+- **Responsive Layout:** Adaptive sidebar and table design optimized for mobile, tablet, and desktop viewports.

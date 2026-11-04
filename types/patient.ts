@@ -48,4 +48,6 @@ export interface PatientQueryParams {
   limit?: number;
   search?: string;
   condition?: string;
+  startDate?: string;
+  endDate?: string;
 }

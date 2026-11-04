@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { X } from 'lucide-react';
+import { UserPlus, X } from 'lucide-react';
 import type { Doctor, Patient, PatientForm } from '@/types';
 import { getDoctor, PATIENT_STRINGS } from '@/utils';
 
@@ -32,37 +32,53 @@ export function PatientModal({
   const assignedDoctor = editingPatient ? getDoctor(editingPatient) : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4">
-      <div className="my-auto w-full max-w-xl rounded-2xl bg-surface shadow-2xl">
-        <div className="flex items-center justify-between border-b border-border px-6 py-5">
-          <div>
-            <h2 className="text-lg font-bold text-foreground">
-              {isEditing ? PATIENT_STRINGS.modalEditTitle : PATIENT_STRINGS.modalAddTitle}
-            </h2>
-            <p className="mt-1 text-xs text-text-secondary">
-              {isEditing ? PATIENT_STRINGS.modalEditSubtitle : PATIENT_STRINGS.modalAddSubtitle}
-            </p>
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-[100] flex min-h-screen items-center justify-center overflow-y-auto bg-black/60 p-4 sm:p-6 backdrop-blur-md transition-all"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget && !saving) onClose();
+      }}
+    >
+      <div className="relative my-auto w-full max-w-xl overflow-hidden rounded-3xl border border-border/80 bg-surface/95 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+        {/* Header */}
+        <div className="mb-6 flex items-start justify-between gap-4 border-b border-border/50 pb-5">
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-500 dark:bg-sky-500/20 shadow-xs">
+              <UserPlus size={22} strokeWidth={2.2} />
+            </div>
+
+            <div>
+              <h2 className="text-lg font-black tracking-tight text-foreground sm:text-xl">
+                {isEditing ? PATIENT_STRINGS.modalEditTitle : PATIENT_STRINGS.modalAddTitle}
+              </h2>
+              <p className="mt-0.5 text-xs font-medium text-text-muted">
+                {isEditing ? PATIENT_STRINGS.modalEditSubtitle : PATIENT_STRINGS.modalAddSubtitle}
+              </p>
+            </div>
           </div>
+
           <button
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-lg p-2 text-text-secondary hover:bg-surface-hover"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-surface text-text-muted shadow-xs transition hover:bg-surface-hover hover:text-foreground disabled:opacity-50"
             aria-label="Close dialog"
           >
-            <X size={20} />
+            <X size={16} />
           </button>
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-4 p-6">
+        {/* Form */}
+        <form onSubmit={onSubmit} className="space-y-4">
           {formError && (
-            <div className="rounded-xl border border-danger/20 bg-danger-bg px-4 py-3 text-sm text-danger">
+            <div className="rounded-2xl border border-danger/20 bg-danger-bg px-4 py-3 text-xs font-semibold text-danger shadow-xs">
               {formError}
             </div>
           )}
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-foreground">
+            <label className="mb-1.5 block text-xs font-bold text-text-secondary">
               {PATIENT_STRINGS.labelName}
             </label>
             <input
@@ -71,13 +87,13 @@ export function PatientModal({
               value={form.name}
               onChange={(event) => onUpdateForm('name', event.target.value)}
               placeholder={PATIENT_STRINGS.placeholderName}
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+              className="h-11 w-full rounded-2xl border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden shadow-xs transition placeholder:text-text-muted focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm font-medium text-foreground">
+              <label className="mb-1.5 block text-xs font-bold text-text-secondary">
                 {PATIENT_STRINGS.labelAge}
               </label>
               <input
@@ -89,18 +105,18 @@ export function PatientModal({
                 value={form.age}
                 onChange={(event) => onUpdateForm('age', event.target.value)}
                 placeholder={PATIENT_STRINGS.placeholderAge}
-                className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+                className="h-11 w-full rounded-2xl border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden shadow-xs transition placeholder:text-text-muted focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-foreground">
+              <label className="mb-1.5 block text-xs font-bold text-text-secondary">
                 {PATIENT_STRINGS.labelGender}
               </label>
               <select
                 value={form.gender}
                 onChange={(event) => onUpdateForm('gender', event.target.value)}
-                className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+                className="h-11 w-full rounded-2xl border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden shadow-xs transition focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -110,7 +126,7 @@ export function PatientModal({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-foreground">
+            <label className="mb-1.5 block text-xs font-bold text-text-secondary">
               {PATIENT_STRINGS.labelPhone}
             </label>
             <input
@@ -119,12 +135,12 @@ export function PatientModal({
               value={form.phone}
               onChange={(event) => onUpdateForm('phone', event.target.value)}
               placeholder={PATIENT_STRINGS.placeholderPhone}
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+              className="h-11 w-full rounded-2xl border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden shadow-xs transition placeholder:text-text-muted focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-foreground">
+            <label className="mb-1.5 block text-xs font-bold text-text-secondary">
               {PATIENT_STRINGS.labelCondition}
             </label>
             <input
@@ -133,20 +149,20 @@ export function PatientModal({
               value={form.condition}
               onChange={(event) => onUpdateForm('condition', event.target.value)}
               placeholder={PATIENT_STRINGS.placeholderCondition}
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+              className="h-11 w-full rounded-2xl border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden shadow-xs transition placeholder:text-text-muted focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           {!isEditing ? (
             <div>
-              <label className="mb-2 block text-sm font-medium text-foreground">
+              <label className="mb-1.5 block text-xs font-bold text-text-secondary">
                 {PATIENT_STRINGS.labelAssignDoctor}
               </label>
               <select
                 required
                 value={form.doctorId}
                 onChange={(event) => onUpdateForm('doctorId', event.target.value)}
-                className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+                className="h-11 w-full rounded-2xl border border-border/70 bg-surface/90 px-4 text-xs text-foreground outline-hidden shadow-xs transition focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">{PATIENT_STRINGS.selectDoctorPlaceholder}</option>
                 {doctors.map((doctor) => (
@@ -156,38 +172,40 @@ export function PatientModal({
                 ))}
               </select>
               {doctors.length === 0 && (
-                <p className="mt-2 text-xs text-warning">
+                <p className="mt-1.5 text-xs font-semibold text-warning">
                   {PATIENT_STRINGS.noDoctorsWarning}
                 </p>
               )}
             </div>
           ) : (
-            <div className="rounded-xl border border-border bg-surface-secondary p-4">
-              <p className="text-xs font-medium text-text-secondary">
+            <div className="rounded-2xl border border-border/70 bg-surface-secondary/70 p-4 shadow-2xs">
+              <p className="text-[11px] font-bold text-text-muted">
                 {PATIENT_STRINGS.assignedDoctorLabel}
               </p>
-              <p className="mt-1 text-sm font-semibold text-foreground">
+              <p className="mt-1 text-xs font-bold text-foreground">
                 {assignedDoctor?.name ?? PATIENT_STRINGS.doctorUnavailable}
               </p>
-              <p className="mt-1 text-xs text-text-secondary">
+              <p className="mt-1 text-[11px] text-text-secondary">
                 {PATIENT_STRINGS.doctorReassignNote}
               </p>
             </div>
           )}
 
-          <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+          {/* Actions */}
+          <div className="flex flex-col-reverse gap-2.5 pt-4 border-t border-border/50 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="rounded-xl border border-border px-5 py-3 text-sm font-semibold text-text-secondary transition hover:bg-surface-hover disabled:opacity-50"
+              className="rounded-full border border-border/70 bg-surface px-5 py-2.5 text-xs font-semibold text-text-secondary shadow-xs transition hover:bg-surface-hover hover:text-foreground disabled:opacity-50"
             >
               {PATIENT_STRINGS.btnCancel}
             </button>
+
             <button
               type="submit"
               disabled={saving || (!isEditing && doctors.length === 0)}
-              className="rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-tr from-primary to-primary-hover px-6 py-2.5 text-xs font-bold text-primary-foreground shadow-sm shadow-primary/25 transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving
                 ? PATIENT_STRINGS.btnSaving
@@ -201,4 +219,3 @@ export function PatientModal({
     </div>
   );
 }
-

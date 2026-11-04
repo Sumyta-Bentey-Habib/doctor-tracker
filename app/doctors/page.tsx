@@ -2,26 +2,28 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Plus } from 'lucide-react';
 import AuthGuard, { useAuth } from '@/components/auth/auth-guard';
 import {
   DoctorAlerts,
   DoctorFilters,
   DoctorFooter,
-  DoctorHeader,
   DoctorModal,
-  DoctorSidebar,
+  DoctorPatientsModal,
   DoctorStats,
   DoctorTable,
 } from '@/components/doctors';
+import { AppShell } from '@/components/layout/app-shell';
 import { useDoctorForm, useDoctorList } from '@/hooks';
 import { doctorService } from '@/services';
+import type { Doctor } from '@/types';
 import { DOCTOR_STRINGS } from '@/utils';
 
 function DoctorsContent() {
   const router = useRouter();
   const { user: admin } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [selectedDoctorForPatients, setSelectedDoctorForPatients] = useState<Doctor | null>(null);
+  const [patientsModalOpen, setPatientsModalOpen] = useState(false);
 
   const {
     doctors,
@@ -33,6 +35,8 @@ function DoctorsContent() {
     search,
     specialization,
     hospital,
+    startDate,
+    endDate,
     page,
     totalDoctors,
     totalPages,
@@ -40,6 +44,8 @@ function DoctorsContent() {
     handleSearchChange,
     handleSpecializationChange,
     handleHospitalChange,
+    handleStartDateChange,
+    handleEndDateChange,
     clearFilters,
     refetch,
     deleteDoctor,
@@ -79,69 +85,85 @@ function DoctorsContent() {
   });
 
   const handleLogout = async () => {
-    setLogoutLoading(true);
-
     try {
       await doctorService.logout();
       router.replace('/login');
     } catch (err) {
       setError(err instanceof Error ? err.message : DOCTOR_STRINGS.unableToLogout);
-      setLogoutLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background lg:flex">
-      <DoctorSidebar
-        adminName={admin.name}
-        adminEmail={admin.email}
-        mobileMenuOpen={mobileMenuOpen}
-        logoutLoading={logoutLoading}
-        onCloseMobileMenu={() => setMobileMenuOpen(false)}
-        onLogout={handleLogout}
-      />
+    <AppShell
+      adminName={admin.name}
+      adminEmail={admin.email}
+      totalDoctors={totalDoctors}
+      onLogout={handleLogout}
+    >
+      <div className="space-y-6">
+        {/* Page Title & Action */}
+        <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="mb-1 text-xs font-bold uppercase tracking-wider text-primary">
+              {DOCTOR_STRINGS.headingBadge}
+            </p>
+            <h2 className="text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+              {DOCTOR_STRINGS.heading}
+            </h2>
+            <p className="mt-1 text-xs font-medium text-text-secondary sm:text-sm">
+              {DOCTOR_STRINGS.subheading}
+            </p>
+          </div>
 
-      <main className="min-w-0 flex-1">
-        <DoctorHeader
-          adminName={admin.name}
-          onOpenMobileMenu={() => setMobileMenuOpen(true)}
-          onAddDoctor={openCreateModal}
+          <button
+            onClick={openCreateModal}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-tr from-primary to-primary-hover px-5 py-2.5 text-xs font-bold text-primary-foreground shadow-sm shadow-primary/25 transition hover:opacity-95"
+          >
+            <Plus size={16} strokeWidth={2.5} />
+            <span>{DOCTOR_STRINGS.addDoctor}</span>
+          </button>
+        </section>
+
+        <DoctorAlerts
+          error={error}
+          success={success}
+          onDismissError={() => setError('')}
+          onDismissSuccess={() => setSuccess('')}
         />
 
-        <div className="mx-auto max-w-[1600px] space-y-6 p-5 sm:p-8 lg:p-10">
-          <DoctorAlerts
-            error={error}
-            success={success}
-            onDismissError={() => setError('')}
-            onDismissSuccess={() => setSuccess('')}
-          />
+        <DoctorStats totalDoctors={totalDoctors} />
 
-          <DoctorStats totalDoctors={totalDoctors} />
+        <DoctorFilters
+          search={search}
+          specialization={specialization}
+          hospital={hospital}
+          startDate={startDate}
+          endDate={endDate}
+          onSearchChange={handleSearchChange}
+          onSpecializationChange={handleSpecializationChange}
+          onHospitalChange={handleHospitalChange}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
+          onClearFilters={clearFilters}
+        />
 
-          <DoctorFilters
-            search={search}
-            specialization={specialization}
-            hospital={hospital}
-            onSearchChange={handleSearchChange}
-            onSpecializationChange={handleSpecializationChange}
-            onHospitalChange={handleHospitalChange}
-            onClearFilters={clearFilters}
-          />
+        <DoctorTable
+          doctors={doctors}
+          loading={loading}
+          page={page}
+          totalPages={totalPages}
+          totalDoctors={totalDoctors}
+          onPageChange={setPage}
+          onEdit={openEditModal}
+          onDelete={(doctor) => void deleteDoctor(doctor)}
+          onViewPatients={(doctor) => {
+            setSelectedDoctorForPatients(doctor);
+            setPatientsModalOpen(true);
+          }}
+        />
 
-          <DoctorTable
-            doctors={doctors}
-            loading={loading}
-            page={page}
-            totalPages={totalPages}
-            totalDoctors={totalDoctors}
-            onPageChange={setPage}
-            onEdit={openEditModal}
-            onDelete={(doctor) => void deleteDoctor(doctor)}
-          />
-
-          <DoctorFooter />
-        </div>
-      </main>
+        <DoctorFooter />
+      </div>
 
       <DoctorModal
         isOpen={modalOpen}
@@ -152,7 +174,16 @@ function DoctorsContent() {
         onUpdateForm={updateForm}
         onSubmit={(event) => void handleSubmit(event)}
       />
-    </div>
+
+      <DoctorPatientsModal
+        isOpen={patientsModalOpen}
+        doctor={selectedDoctorForPatients}
+        onClose={() => {
+          setPatientsModalOpen(false);
+          setSelectedDoctorForPatients(null);
+        }}
+      />
+    </AppShell>
   );
 }
 
