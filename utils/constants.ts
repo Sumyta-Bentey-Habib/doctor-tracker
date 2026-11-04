@@ -14,7 +14,7 @@ export type AppStrings = typeof APP_STRINGS;
 
 export const PATIENT_STRINGS = {
   // Navigation & Headers
-  brandName: 'MediTrack',
+  brandName: 'DoctorTracker',
   adminPortal: 'ADMIN PORTAL',
   navMenu: 'Main menu',
   navOverview: 'Overview',
@@ -104,7 +104,7 @@ export type PatientStrings = typeof PATIENT_STRINGS;
 
 export const DOCTOR_STRINGS = {
   // Navigation & Brand
-  brandName: 'MediTrack',
+  brandName: 'DoctorTracker',
   adminPortal: 'ADMIN PORTAL',
   mainMenu: 'MAIN MENU',
   preferences: 'PREFERENCES',
@@ -163,7 +163,7 @@ export const DOCTOR_STRINGS = {
   pageWord: 'Page',
 
   // Footer
-  copyright: (year: number) => `© ${year} MediTrack. All rights reserved.`,
+  copyright: (year: number) => `© ${year} DoctorTracker. All rights reserved.`,
   footerTagline: 'Healthcare management made simpler.',
 
   // Modal
@@ -191,7 +191,7 @@ export type DoctorStrings = typeof DOCTOR_STRINGS;
 
 export const DASHBOARD_STRINGS = {
   // Brand & Nav
-  brandName: 'MediTrack',
+  brandName: 'DoctorTracker',
   adminPortal: 'ADMIN PORTAL',
   navOverview: 'Overview',
   navDoctors: 'Doctors',
@@ -250,7 +250,7 @@ export const DASHBOARD_STRINGS = {
   unableToLogout: 'Unable to log out.',
 
   // Footer
-  copyright: (year: number) => `© ${year} MediTrack. All rights reserved.`,
+  copyright: (year: number) => `© ${year} DoctorTracker. All rights reserved.`,
   footerTagline: 'Healthcare management made simpler.',
 } as const;
 
@@ -268,7 +268,7 @@ export const THEME_STRINGS = {
 export type ThemeStrings = typeof THEME_STRINGS;
 
 export const WELCOME_STRINGS = {
-  brandName: 'MediTrack',
+  brandName: 'DoctorTracker',
   adminPortal: 'ADMIN PORTAL',
   badge: 'HEALTHCARE MANAGEMENT PLATFORM',
   heroTitle: 'Manage healthcare operations with modern clarity & intelligence.',
@@ -287,16 +287,15 @@ export const WELCOME_STRINGS = {
   feature2Desc:
     'Register incoming patients, assign designated doctors, and record conditions seamlessly.',
   feature3Title: 'Operational Insights',
-  feature3Desc:
-    'Real-time registration metrics and doctor load distribution at your fingertips.',
+  feature3Desc: 'Real-time registration metrics and doctor load distribution at your fingertips.',
   securityBadge: 'Protected by role-based administrator security & session encryption',
-  footerCopyright: (year: number) => `© ${year} MediTrack. All rights reserved.`,
+  footerCopyright: (year: number) => `© ${year} DoctorTracker. All rights reserved.`,
 } as const;
 
 export type WelcomeStrings = typeof WELCOME_STRINGS;
 
 export const LOGIN_STRINGS = {
-  brandName: 'MediTrack',
+  brandName: 'DoctorTracker',
   adminPortal: 'ADMIN PORTAL',
   backToWelcome: 'Back to welcome',
   heading: 'Welcome back',
@@ -309,8 +308,7 @@ export const LOGIN_STRINGS = {
   btnSigningIn: 'Signing in...',
   restrictedNotice: 'Restricted access · Authorized administrators only',
   sideTitle: 'Manage healthcare operations with clarity.',
-  sideSubtitle:
-    'A centralized workspace to manage doctors, patients, and healthcare records.',
+  sideSubtitle: 'A centralized workspace to manage doctors, patients, and healthcare records.',
 } as const;
 
 export type LoginStrings = typeof LOGIN_STRINGS;

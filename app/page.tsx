@@ -202,7 +202,7 @@ export default function WelcomeHomePage() {
         {/* Footer */}
         <footer className="mt-20 flex flex-col items-center justify-between gap-4 border-t border-border/50 pt-8 text-xs text-text-muted sm:mt-28 sm:flex-row">
           <p>{WELCOME_STRINGS.footerCopyright(currentYear)}</p>
-          <p>MediTrack · Healthcare management made simpler.</p>
+          <p>DoctorTracker · Healthcare management made simpler.</p>
         </footer>
       </main>
     </div>
