@@ -35,5 +35,7 @@ export interface DoctorQueryParams {
   search?: string;
   specialization?: string;
   hospital?: string;
+  startDate?: string;
+  endDate?: string;
 }
 

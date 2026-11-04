@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import AuthGuard, { useAuth } from '@/components/auth/auth-guard';
@@ -8,17 +9,21 @@ import {
   DoctorFilters,
   DoctorFooter,
   DoctorModal,
+  DoctorPatientsModal,
   DoctorStats,
   DoctorTable,
 } from '@/components/doctors';
 import { AppShell } from '@/components/layout/app-shell';
 import { useDoctorForm, useDoctorList } from '@/hooks';
 import { doctorService } from '@/services';
+import type { Doctor } from '@/types';
 import { DOCTOR_STRINGS } from '@/utils';
 
 function DoctorsContent() {
   const router = useRouter();
   const { user: admin } = useAuth();
+  const [selectedDoctorForPatients, setSelectedDoctorForPatients] = useState<Doctor | null>(null);
+  const [patientsModalOpen, setPatientsModalOpen] = useState(false);
 
   const {
     doctors,
@@ -30,6 +35,8 @@ function DoctorsContent() {
     search,
     specialization,
     hospital,
+    startDate,
+    endDate,
     page,
     totalDoctors,
     totalPages,
@@ -37,6 +44,8 @@ function DoctorsContent() {
     handleSearchChange,
     handleSpecializationChange,
     handleHospitalChange,
+    handleStartDateChange,
+    handleEndDateChange,
     clearFilters,
     refetch,
     deleteDoctor,
@@ -128,9 +137,13 @@ function DoctorsContent() {
           search={search}
           specialization={specialization}
           hospital={hospital}
+          startDate={startDate}
+          endDate={endDate}
           onSearchChange={handleSearchChange}
           onSpecializationChange={handleSpecializationChange}
           onHospitalChange={handleHospitalChange}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
           onClearFilters={clearFilters}
         />
 
@@ -143,6 +156,10 @@ function DoctorsContent() {
           onPageChange={setPage}
           onEdit={openEditModal}
           onDelete={(doctor) => void deleteDoctor(doctor)}
+          onViewPatients={(doctor) => {
+            setSelectedDoctorForPatients(doctor);
+            setPatientsModalOpen(true);
+          }}
         />
 
         <DoctorFooter />
@@ -156,6 +173,15 @@ function DoctorsContent() {
         formLoading={formLoading}
         onUpdateForm={updateForm}
         onSubmit={(event) => void handleSubmit(event)}
+      />
+
+      <DoctorPatientsModal
+        isOpen={patientsModalOpen}
+        doctor={selectedDoctorForPatients}
+        onClose={() => {
+          setPatientsModalOpen(false);
+          setSelectedDoctorForPatients(null);
+        }}
       />
     </AppShell>
   );

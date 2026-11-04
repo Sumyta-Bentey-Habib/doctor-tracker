@@ -24,6 +24,8 @@ function PatientsContent() {
     error,
     search,
     condition,
+    startDate,
+    endDate,
     page,
     totalPatients,
     totalPages,
@@ -31,6 +33,9 @@ function PatientsContent() {
     setPage,
     handleSearchChange,
     handleConditionChange,
+    handleStartDateChange,
+    handleEndDateChange,
+    clearFilters,
     refetch,
     deletePatient,
   } = usePatients();
@@ -105,8 +110,13 @@ function PatientsContent() {
         <PatientFilters
           search={search}
           condition={condition}
+          startDate={startDate}
+          endDate={endDate}
           onSearchChange={handleSearchChange}
           onConditionChange={handleConditionChange}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
+          onClearFilters={clearFilters}
         />
 
         <PatientTable

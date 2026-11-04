@@ -35,6 +35,9 @@ export const PATIENT_STRINGS = {
   filterSubheading: 'Find patients by name, phone number, or medical condition.',
   searchPlaceholder: 'Search patients...',
   conditionPlaceholder: 'Filter by condition...',
+  startDatePlaceholder: 'From (YYYY-MM-DD)',
+  endDatePlaceholder: 'To (YYYY-MM-DD)',
+  clearAllFilters: 'Clear all filters',
 
   // Table
   recordsHeading: 'Patient records',
@@ -129,6 +132,8 @@ export const DOCTOR_STRINGS = {
   searchPlaceholder: 'Search doctors...',
   specializationPlaceholder: 'Filter by specialization',
   hospitalPlaceholder: 'Filter by hospital',
+  startDatePlaceholder: 'From (YYYY-MM-DD)',
+  endDatePlaceholder: 'To (YYYY-MM-DD)',
   clearAllFilters: 'Clear all filters',
 
   // Table
@@ -140,6 +145,17 @@ export const DOCTOR_STRINGS = {
   noDoctorsSubtitle: 'Try changing your filters or add a new doctor.',
   editDoctor: 'Edit doctor',
   deleteDoctor: 'Delete doctor',
+  viewPatients: 'View assigned patients',
+  doctorPatientsModalTitle: (name: string) => `Patients of ${name}`,
+  doctorPatientsModalSubtitle: (count: number) =>
+    `${count} patient${count === 1 ? '' : 's'} assigned to this doctor.`,
+  addPatientUnderDoctor: 'Add patient to this doctor',
+  noDoctorPatientsTitle: 'No patients assigned',
+  noDoctorPatientsSubtitle: 'This doctor has no assigned patients yet.',
+  deletePatientFromDoctorConfirm: (name: string) =>
+    `Are you sure you want to remove ${name} from this doctor's patient list?`,
+  patientDeletedFromDoctorSuccess: 'Patient removed from doctor list.',
+  patientAddedUnderDoctorSuccess: 'Patient registered under this doctor.',
   showing: 'Showing',
   of: 'of',
   doctorsWord: 'doctors',

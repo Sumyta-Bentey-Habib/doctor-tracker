@@ -7,6 +7,7 @@ import {
   Phone,
   Stethoscope,
   Trash2,
+  Users,
 } from 'lucide-react';
 import type { Doctor } from '@/types';
 import { DOCTOR_STRINGS, formatDoctorDate, getDoctorInitials } from '@/utils';
@@ -20,6 +21,7 @@ interface DoctorTableProps {
   onPageChange: (newPage: number) => void;
   onEdit: (doctor: Doctor) => void;
   onDelete: (doctor: Doctor) => void;
+  onViewPatients?: (doctor: Doctor) => void;
 }
 
 export function DoctorTable({
@@ -31,6 +33,7 @@ export function DoctorTable({
   onPageChange,
   onEdit,
   onDelete,
+  onViewPatients,
 }: DoctorTableProps) {
   return (
     <section className="overflow-hidden rounded-3xl border border-border/70 bg-surface/85 shadow-card backdrop-blur-xl transition hover:border-primary/20">
@@ -133,6 +136,18 @@ export function DoctorTable({
 
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
+                        {onViewPatients && (
+                          <button
+                            type="button"
+                            onClick={() => onViewPatients(doctor)}
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-surface text-text-secondary shadow-xs transition hover:border-primary/50 hover:text-primary"
+                            title={DOCTOR_STRINGS.viewPatients}
+                            aria-label={DOCTOR_STRINGS.viewPatients}
+                          >
+                            <Users size={14} />
+                          </button>
+                        )}
+
                         <button
                           onClick={() => onEdit(doctor)}
                           className="flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-surface text-text-secondary shadow-xs transition hover:border-primary/50 hover:text-primary"

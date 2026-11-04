@@ -14,6 +14,8 @@ export function usePatients({ initialPage = 1, limit = 10 }: UsePatientsOptions 
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [condition, setCondition] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [page, setPage] = useState(initialPage);
   const [totalPatients, setTotalPatients] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -29,6 +31,8 @@ export function usePatients({ initialPage = 1, limit = 10 }: UsePatientsOptions 
         limit,
         search,
         condition,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
       });
 
       setPatients(response.data);
@@ -39,13 +43,20 @@ export function usePatients({ initialPage = 1, limit = 10 }: UsePatientsOptions 
     } finally {
       setLoading(false);
     }
-  }, [page, limit, search, condition]);
+  }, [page, limit, search, condition, startDate, endDate]);
 
   useEffect(() => {
     let isSubscribed = true;
 
     patientService
-      .getPatients({ page, limit, search, condition })
+      .getPatients({
+        page,
+        limit,
+        search,
+        condition,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+      })
       .then((response) => {
         if (!isSubscribed) return;
         setPatients(response.data);
@@ -62,7 +73,7 @@ export function usePatients({ initialPage = 1, limit = 10 }: UsePatientsOptions 
     return () => {
       isSubscribed = false;
     };
-  }, [page, limit, search, condition]);
+  }, [page, limit, search, condition, startDate, endDate]);
 
   const handleSearchChange = (value: string) => {
     setLoading(true);
@@ -73,6 +84,27 @@ export function usePatients({ initialPage = 1, limit = 10 }: UsePatientsOptions 
   const handleConditionChange = (value: string) => {
     setLoading(true);
     setCondition(value);
+    setPage(1);
+  };
+
+  const handleStartDateChange = (value: string) => {
+    setLoading(true);
+    setStartDate(value);
+    setPage(1);
+  };
+
+  const handleEndDateChange = (value: string) => {
+    setLoading(true);
+    setEndDate(value);
+    setPage(1);
+  };
+
+  const clearFilters = () => {
+    setLoading(true);
+    setSearch('');
+    setCondition('');
+    setStartDate('');
+    setEndDate('');
     setPage(1);
   };
 
@@ -106,6 +138,8 @@ export function usePatients({ initialPage = 1, limit = 10 }: UsePatientsOptions 
     error,
     search,
     condition,
+    startDate,
+    endDate,
     page,
     totalPatients,
     totalPages,
@@ -113,6 +147,9 @@ export function usePatients({ initialPage = 1, limit = 10 }: UsePatientsOptions 
     setPage,
     handleSearchChange,
     handleConditionChange,
+    handleStartDateChange,
+    handleEndDateChange,
+    clearFilters,
     refetch: fetchPatients,
     deletePatient,
   };
